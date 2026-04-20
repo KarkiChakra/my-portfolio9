@@ -273,14 +273,25 @@ const initContactForm = () => {
   };
 
   form.addEventListener("submit", async (e) => {
-    e.preventDefault();
-
     const result = validate();
 
     if (!result.valid) {
+      e.preventDefault();
       note.textContent = "Please fix the errors above.";
       return;
     }
+
+    const isFormSubmitEndpoint =
+      typeof form.action === "string" &&
+      form.action.toLowerCase().includes("formsubmit.co");
+
+    if (isFormSubmitEndpoint) {
+      // Let browser perform normal POST submit to FormSubmit.
+      note.textContent = "Submitting...";
+      return;
+    }
+
+    e.preventDefault();
 
     if (location.protocol === "file:") {
       note.textContent =
