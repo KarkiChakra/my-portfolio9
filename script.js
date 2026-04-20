@@ -193,7 +193,7 @@ const initContactForm = () => {
   const messageInput = qs("#message", form);
   const submitBtn = qs('button[type="submit"]', form);
 
-  const emailJsPublicKey = "5dMmWrcbjFp76qipf";
+  const emailJsPublicKey = "hB0sOzjQm9nOFFg74";
   const emailJsServiceId = "service_y66u7rs";
   const emailJsTemplateId = "template_oxk5fm9";
 
