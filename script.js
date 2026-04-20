@@ -181,7 +181,7 @@ const initPhotoViewer = () => {
 
 
 // ================================
-// Contact Form (EmailJS)
+// Contact Form (FormSubmit)
 // ================================
 const initContactForm = () => {
   const form = qs("#contact-form");
@@ -191,33 +191,10 @@ const initContactForm = () => {
   const nameInput = qs("#name", form);
   const emailInput = qs("#email", form);
   const messageInput = qs("#message", form);
-  const submitBtn = qs('button[type="submit"]', form);
 
-  const emailJsPublicKey = "hB0sOzjQm9nOFFg74";
-  const emailJsServiceId = "service_y66u7rs";
-  const emailJsTemplateId = "template_oxk5fm9";
-
-  const emailJsApi =
-    window.emailjs && typeof window.emailjs === "object"
-      ? window.emailjs
-      : null;
-
-  let emailJsInitOk = false;
-  if (emailJsApi && typeof emailJsApi.init === "function") {
-    try {
-      // `emailjs-com@3` expects a plain string public key.
-      emailJsApi.init(emailJsPublicKey);
-      emailJsInitOk = true;
-    } catch {
-      try {
-        // Some newer builds accept object-form options.
-        emailJsApi.init({ publicKey: emailJsPublicKey });
-        emailJsInitOk = true;
-      } catch {
-        emailJsInitOk = false;
-      }
-    }
-  }
+  const isFormSubmitEndpoint =
+    typeof form.action === "string" &&
+    form.action.toLowerCase().includes("formsubmit.co");
 
   const getValue = (el) =>
     el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement
@@ -264,15 +241,7 @@ const initContactForm = () => {
     return { valid, name, email, message };
   };
 
-  const createMailto = ({ name, email, message }) => {
-    const subject = encodeURIComponent(`Portfolio message from ${name}`);
-    const body = encodeURIComponent(
-      `Name: ${name}\nEmail: ${email}\n\n${message}`
-    );
-    return `mailto:ck25304015@ga.ttc.ac.jp?subject=${subject}&body=${body}`;
-  };
-
-  form.addEventListener("submit", async (e) => {
+  form.addEventListener("submit", (e) => {
     const result = validate();
 
     if (!result.valid) {
@@ -281,102 +250,13 @@ const initContactForm = () => {
       return;
     }
 
-    const isFormSubmitEndpoint =
-      typeof form.action === "string" &&
-      form.action.toLowerCase().includes("formsubmit.co");
-
-    if (isFormSubmitEndpoint) {
-      // Let browser perform normal POST submit to FormSubmit.
-      note.textContent = "Submitting...";
+    if (!isFormSubmitEndpoint) {
+      e.preventDefault();
+      note.textContent = "Form endpoint not configured.";
       return;
     }
 
-    e.preventDefault();
-
-    if (location.protocol === "file:") {
-      note.textContent =
-        "Open with Live Server (http://localhost). Opening email app...";
-      window.location.href = createMailto(result);
-      return;
-    }
-
-    if (!emailJsApi || typeof emailJsApi.send !== "function") {
-      note.textContent = "EmailJS not loaded. Opening email app...";
-      window.location.href = createMailto(result);
-      return;
-    }
-
-    if (!emailJsInitOk) {
-      note.textContent = "EmailJS init error. Opening email app...";
-      window.location.href = createMailto(result);
-      return;
-    }
-
-    if (submitBtn) submitBtn.disabled = true;
-    note.textContent = "Sending...";
-
-    const templateParams = {
-      // Keep both naming styles so common EmailJS templates can resolve fields.
-      from_name: result.name,
-      from_email: result.email,
-      reply_to: result.email,
-      message: result.message,
-      name: result.name,
-      email: result.email,
-    };
-
-    const sendWithFallbackSignatures = async () => {
-      try {
-        await emailJsApi.send(
-          emailJsServiceId,
-          emailJsTemplateId,
-          templateParams
-        );
-        return;
-      } catch {
-        // v3 style optional public key as string
-      }
-
-      try {
-        await emailJsApi.send(
-          emailJsServiceId,
-          emailJsTemplateId,
-          templateParams,
-          emailJsPublicKey
-        );
-        return;
-      } catch {
-        // v4 style options object with publicKey
-      }
-
-      await emailJsApi.send(
-        emailJsServiceId,
-        emailJsTemplateId,
-        templateParams,
-        { publicKey: emailJsPublicKey }
-      );
-    };
-
-    try {
-      await sendWithFallbackSignatures();
-
-      note.textContent = "✅ Message sent successfully!";
-      form.reset();
-    } catch (error) {
-      console.error("Email send failed:", error);
-      const status =
-        typeof error?.status === "number" ? `status ${error.status}` : "status unknown";
-      const reason =
-        typeof error?.text === "string" && error.text
-          ? error.text
-          : typeof error?.message === "string" && error.message
-          ? error.message
-          : "Unknown error";
-      note.textContent = `Could not send via web API (${status}: ${reason}). Opening email app...`;
-      window.location.href = createMailto(result);
-    } finally {
-      if (submitBtn) submitBtn.disabled = false;
-    }
+    note.textContent = "Submitting...";
   });
 };
 
