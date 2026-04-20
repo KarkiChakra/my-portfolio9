@@ -197,13 +197,25 @@ const initContactForm = () => {
   const emailJsServiceId = "service_y66u7rs";
   const emailJsTemplateId = "template_oxk5fm9";
 
+  const emailJsApi =
+    window.emailjs && typeof window.emailjs === "object"
+      ? window.emailjs
+      : null;
+
   let emailJsInitOk = false;
-  if ("emailjs" in window && typeof window.emailjs?.init === "function") {
+  if (emailJsApi && typeof emailJsApi.init === "function") {
     try {
-      window.emailjs.init(emailJsPublicKey);
+      // `emailjs-com@3` expects a plain string public key.
+      emailJsApi.init(emailJsPublicKey);
       emailJsInitOk = true;
     } catch {
-      emailJsInitOk = false;
+      try {
+        // Some newer builds accept object-form options.
+        emailJsApi.init({ publicKey: emailJsPublicKey });
+        emailJsInitOk = true;
+      } catch {
+        emailJsInitOk = false;
+      }
     }
   }
 
@@ -277,7 +289,7 @@ const initContactForm = () => {
       return;
     }
 
-    if (!("emailjs" in window) || typeof window.emailjs?.send !== "function") {
+    if (!emailJsApi || typeof emailJsApi.send !== "function") {
       note.textContent = "EmailJS not loaded. Opening email app...";
       window.location.href = createMailto(result);
       return;
@@ -292,22 +304,65 @@ const initContactForm = () => {
     if (submitBtn) submitBtn.disabled = true;
     note.textContent = "Sending...";
 
-    try {
-      await window.emailjs.send(
+    const templateParams = {
+      // Keep both naming styles so common EmailJS templates can resolve fields.
+      from_name: result.name,
+      from_email: result.email,
+      reply_to: result.email,
+      message: result.message,
+      name: result.name,
+      email: result.email,
+    };
+
+    const sendWithFallbackSignatures = async () => {
+      try {
+        await emailJsApi.send(
+          emailJsServiceId,
+          emailJsTemplateId,
+          templateParams
+        );
+        return;
+      } catch {
+        // v3 style optional public key as string
+      }
+
+      try {
+        await emailJsApi.send(
+          emailJsServiceId,
+          emailJsTemplateId,
+          templateParams,
+          emailJsPublicKey
+        );
+        return;
+      } catch {
+        // v4 style options object with publicKey
+      }
+
+      await emailJsApi.send(
         emailJsServiceId,
         emailJsTemplateId,
-        {
-          from_name: result.name,
-          from_email: result.email,
-          message: result.message,
-        },
-        emailJsPublicKey
+        templateParams,
+        { publicKey: emailJsPublicKey }
       );
+    };
+
+    try {
+      await sendWithFallbackSignatures();
 
       note.textContent = "✅ Message sent successfully!";
       form.reset();
     } catch (error) {
-      note.textContent = "❌ Failed to send.";
+      console.error("Email send failed:", error);
+      const status =
+        typeof error?.status === "number" ? `status ${error.status}` : "status unknown";
+      const reason =
+        typeof error?.text === "string" && error.text
+          ? error.text
+          : typeof error?.message === "string" && error.message
+          ? error.message
+          : "Unknown error";
+      note.textContent = `Could not send via web API (${status}: ${reason}). Opening email app...`;
+      window.location.href = createMailto(result);
     } finally {
       if (submitBtn) submitBtn.disabled = false;
     }
