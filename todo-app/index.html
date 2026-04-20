@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do App</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<a class="back-btn" href="../index.html">← Back</a>
+
+<div class="container">
+    <div class="header">
+        <h1>To-Do App</h1>
+        <button id="themeToggle" class="theme-toggle" type="button" aria-label="Toggle dark mode">🌙</button>
+    </div>
+
+    <div class="add-row">
+        <input type="text" id="taskInput" placeholder="Enter task">
+        <button onclick="addTask()">Add</button>
+    </div>
+
+    <div class="filters">
+        <button id="filterAll" class="filter-btn" onclick="setFilter('all')">All</button>
+        <button id="filterActive" class="filter-btn" onclick="setFilter('active')">Active</button>
+        <button id="filterCompleted" class="filter-btn" onclick="setFilter('completed')">Completed</button>
+    </div>
+
+    <div class="task-footer">
+        <div id="taskCounter" class="task-counter">0 tasks left</div>
+        <button id="clearCompletedBtn" class="clear-completed" type="button" onclick="clearCompleted()">Clear completed</button>
+    </div>
+
+    <div id="emptyState" class="empty-state" hidden>No tasks yet. Add one 🚀</div>
+
+    <ul id="taskList"></ul>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
