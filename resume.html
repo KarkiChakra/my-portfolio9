@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Karki Chakra | Resume</title>
+    <meta name="description" content="Resume for Karki Chakra — junior web developer based in Japan." />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#resume">Skip to content</a>
+
+    <header class="site-header" id="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="./index.html#home" aria-label="Back to portfolio">
+          <span class="brand-mark" aria-hidden="true"></span>
+          <span class="brand-text">Karki Chakra</span>
+        </a>
+        <nav class="nav" aria-label="Resume actions">
+          <a class="btn btn-ghost btn-small" href="./index.html#contact">Contact</a>
+          <button class="btn btn-primary btn-small" type="button" id="print">Print / Save PDF</button>
+        </nav>
+      </div>
+    </header>
+
+    <main class="section" id="resume">
+      <div class="container">
+        <div class="section-head">
+          <h1 class="section-title">Resume</h1>
+          <p class="section-subtitle">Junior Web Developer • Japan</p>
+        </div>
+
+        <div class="grid two-col">
+          <section class="card" data-reveal="up">
+            <h2 class="card-title">Profile</h2>
+            <p class="card-text">
+              I’m a junior web developer based in Japan, focused on building modern web applications with clean UI,
+              strong fundamentals, and steady growth through consistent practice.
+            </p>
+            <div class="contact-items">
+              <div class="contact-item">
+                <span class="contact-label">Email</span>
+                <span class="contact-value">ck25304015@ga.ttc.ac.jp</span>
+              </div>
+              <div class="contact-item">
+                <span class="contact-label">Location</span>
+                <span class="contact-value">Japan</span>
+              </div>
+            </div>
+          </section>
+
+          <section class="card" data-reveal="up">
+            <h2 class="card-title">Core Skills</h2>
+            <div class="chips">
+              <span class="chip">HTML</span>
+              <span class="chip">CSS</span>
+              <span class="chip">JavaScript</span>
+              <span class="chip">Java</span>
+              <span class="chip">SQL</span>
+              <span class="chip">Git</span>
+              <span class="chip">Firebase</span>
+            </div>
+          </section>
+        </div>
+
+        <div class="section-head" style="margin-top: 1.6rem">
+          <h2 class="section-title">Projects</h2>
+          <p class="section-subtitle">Selected work that demonstrates progress and product thinking.</p>
+        </div>
+
+        <div class="grid three-col">
+          <section class="card" data-reveal="up">
+            <h3 class="card-title">Weather App</h3>
+            <p class="card-text">Responsive UI, API integration, location support, and clear forecast presentation.</p>
+            <div class="project-links">
+              <a class="btn btn-small btn-primary" href="./weather-app/index.html" target="_blank" rel="noopener noreferrer"
+                >Live Demo</a
+              >
+            </div>
+          </section>
+          <section class="card" data-reveal="up">
+            <h3 class="card-title">Portfolio Website</h3>
+            <p class="card-text">Premium UI, micro-interactions, scroll animations, and glassmorphism styling.</p>
+            <div class="project-links">
+              <a class="btn btn-small btn-primary" href="./index.html#home">Open</a>
+            </div>
+          </section>
+          <section class="card" data-reveal="up">
+            <h3 class="card-title">Calculator</h3>
+            <p class="card-text">A practical calculator with enhanced UI and safe calculation behavior.</p>
+            <div class="project-links">
+              <a class="btn btn-small btn-primary" href="./calculator/index.html" target="_blank" rel="noopener noreferrer"
+                >Live Demo</a
+              >
+            </div>
+          </section>
+        </div>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <p class="footer-text">© <span id="year"></span> Karki Chakra</p>
+        <div class="footer-links">
+          <a class="footer-link" href="./index.html#home">Portfolio</a>
+          <a class="footer-link" href="./index.html#contact">Contact</a>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      const btn = document.getElementById("print");
+      if (btn) btn.addEventListener("click", () => window.print());
+    </script>
+    <script src="./script.js?v=20260420-7"></script>
+  </body>
+</html>

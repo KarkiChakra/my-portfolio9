@@ -3,99 +3,170 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    
-    <title>Portfolio</title>
-    <meta name="description" content="Personal portfolio showcasing skills, projects, and contact details." />
+
+    <title>Karki Chakra | Junior Web Developer (Japan)</title>
+    <meta
+      name="description"
+      content="Premium portfolio of Karki Chakra — junior web developer in Japan building modern, fast, user-focused web applications."
+    />
     <link rel="stylesheet" href="./styles.css" />
+    <script>
+      if (localStorage.getItem("theme") === "light") {
+        document.documentElement.setAttribute("data-theme", "light");
+      }
+    </script>
   </head>
   <body>
+    <div class="intro" id="intro" aria-hidden="true">
+      <div class="intro-card">
+        <div class="intro-mark" aria-hidden="true"></div>
+        <div class="intro-text">
+          <div class="intro-title">Karki Chakra</div>
+          <div class="intro-sub">Loading portfolio…</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cursor" id="cursor" aria-hidden="true"></div>
+    <div class="cursor-dot" id="cursor-dot" aria-hidden="true"></div>
+
     <div id="top"></div>
-    <a class="skip-link" href="#home">Skip to content</a>
+    <a class="skip-link" href="#main">Skip to content</a>
 
     <header class="site-header" id="site-header">
       <div class="container header-inner">
         <a class="brand" href="#home" aria-label="Go to Home">
-          <span class="brand-mark" aria-hidden="true">●</span>
-          <span class="brand-text">Portfolio</span>
+          <span class="brand-mark" aria-hidden="true"></span>
+          <span class="brand-text">Karki Chakra</span>
         </a>
 
         <nav class="nav" aria-label="Primary">
+          <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle theme">
+            <svg class="sun-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+            <svg class="moon-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display: none;"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+          </button>
           <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links">
             <span class="nav-toggle-text">Menu</span>
             <span class="nav-toggle-icon" aria-hidden="true"></span>
           </button>
           <ul class="nav-links" id="nav-links">
             <li><a class="nav-link" href="#home">Home</a></li>
-            <li><a class="nav-link" href="#about">About Me</a></li>
-            <li><a class="nav-link" href="#skills">Skills</a></li>
-            <li><a class="nav-link" href="#projects">Projects</a></li>
+            <li><a class="nav-link" href="#about">Story</a></li>
+            <li><a class="nav-link" href="#skills">Stack</a></li>
+            <li><a class="nav-link" href="#projects">Work</a></li>
+            <li><a class="nav-link" href="#timeline">Growth</a></li>
             <li><a class="nav-link" href="#contact">Contact</a></li>
           </ul>
         </nav>
       </div>
     </header>
 
-    <main>
+    <main id="main">
       <section class="section hero" id="home">
+        <canvas class="fx" id="fx" aria-hidden="true"></canvas>
+        <div class="blobs" aria-hidden="true">
+          <span class="blob b1"></span>
+          <span class="blob b2"></span>
+          <span class="blob b3"></span>
+        </div>
+
         <div class="container hero-inner">
-          <div class="hero-content">
-            <p class="eyebrow">Hi, I’m</p>
-            <h1 class="hero-title">KARKI CHAKRA</h1>
+          <div class="hero-content" data-reveal="up">
+            <div class="hero-kicker">Junior Web Developer • Japan</div>
+            <h1 class="hero-title">
+              <span class="hero-title-strong">Karki</span>
+              <span class="hero-title-strong">Chakra</span>
+            </h1>
+            <div class="hero-roles" aria-label="Roles">
+              <span class="hero-roles-prefix">I’m a</span>
+              <span class="hero-roles-typed" id="typed" aria-live="polite"></span>
+              <span class="hero-roles-caret" aria-hidden="true"></span>
+            </div>
             <p class="hero-subtitle">
-              An IT student passionate about building simple and practical web applications using <strong>Java</strong>,
-              <strong>HTML</strong>, <strong>CSS</strong>, <strong>JavaScript</strong>, and <strong>SQL</strong>.
-              <br />
-              I enjoy learning through hands-on projects and continuously improving my development skills.
+              I build fast, scalable, and user-focused web experiences — and I level up every week through real projects.
             </p>
+
             <div class="hero-cta">
               <a class="btn btn-primary" href="#projects">View Projects</a>
               <a class="btn btn-ghost" href="#contact">Contact Me</a>
+              <a class="btn btn-ghost" href="./resume.html" target="_blank" rel="noopener noreferrer">Download Resume</a>
             </div>
-            <div class="hero-meta">
-              <a class="pill" href="#skills">Java</a>
-              <a class="pill" href="#skills">JavaScript</a>
-              <a class="pill" href="#skills">SQL</a>
-            </div>
-          </div>
 
-          <div class="hero-card" role="img" aria-label="Profile card">
-            <div class="avatar">
-              <button class="avatar-button" type="button" aria-label="View photo">
-                <img class="avatar-photo" src="./Profile.png" alt="KARKI CHAKRA" />
-              </button>
-            </div>
-            <div class="hero-card-body">
-              <p class="hero-card-name">KARKI CHAKRA</p>
-              <p class="hero-card-role">Aiming to be a skilled Web Developer</p>
-              <div class="hero-card-stats">
-               
-               </div>
-              <a class="btn btn-small btn-primary" href="#contact">Let’s talk</a>
+            <div class="hero-meta">
+              <span class="pill">Java</span>
+              <span class="pill">JavaScript</span>
+              <span class="pill">SQL</span>
+              <span class="pill">Git</span>
+              <span class="pill">Firebase</span>
             </div>
           </div>
+          <aside class="hero-side" data-reveal="up" data-tilt>
+            <div class="profile card">
+              <div class="profile-top">
+                <div class="profile-glow" aria-hidden="true"></div>
+                <button class="photo-button" type="button" aria-label="View profile photo" data-photo-src="./Profile.png">
+                  <img class="profile-img" src="./Profile.png" alt="Karki Chakra" />
+                </button>
+              </div>
+              <div class="profile-body">
+                <div class="profile-title">Now</div>
+                <div class="profile-text">
+                  Studying and building modern web applications, improving performance, accessibility, and clean code habits.
+                </div>
+                <div class="badges">
+                  <span class="badge">UI</span>
+                  <span class="badge">Performance</span>
+                  <span class="badge">Clean Code</span>
+                </div>
+              </div>
+            </div>
+          </aside>
         </div>
-        <div class="hero-bg" aria-hidden="true"></div>
       </section>
 
       <section class="section" id="about">
         <div class="container">
           <div class="section-head">
-            <h2 class="section-title">About Me</h2>
+            <h2 class="section-title">My Journey into Tech</h2>
+            <p class="section-subtitle">Consistency, curiosity, and building in public.</p>
           </div>
 
-          <div class="grid">
-            <div class="card">
-              <h3 class="card-title">What I do</h3>
+          <div class="story">
+            <div class="story-main card" data-reveal="up">
+              <h3 class="card-title">From curiosity to craft</h3>
               <p class="card-text">
-                私は情報処理科の2年生で、現在Java・JavaScript・SQLを中心に学習しています。実践的なWebアプリケーションの開発に興味があり、日々スキル向上に取り組んでいます。
-                <br />
-                <br />
-                これまでにCRUD処理やユーザー管理機能などの基本的なシステムを制作し、機能性と分かりやすいコードを意識して開発してきました。
-                <br />
-                <br />
-                将来的には、ユーザーにとって使いやすく、効率的なシステムを開発できるエンジニアになることを目標としています。
+                I started coding because I wanted to understand how modern products are built — not just how they look,
+                but how they perform, scale, and feel to the user.
               </p>
+              <div class="story-steps">
+                <div class="step">
+                  <div class="step-n">01</div>
+                  <div class="step-b">
+                    <div class="step-t">Learning foundations</div>
+                    <div class="step-d">HTML/CSS/JavaScript for UI, Java + SQL for logic and data.</div>
+                  </div>
+                </div>
+                <div class="step">
+                  <div class="step-n">02</div>
+                  <div class="step-b">
+                    <div class="step-t">Building real apps</div>
+                    <div class="step-d">Weather, tracking tools, and polished UI experiences with strong UX.</div>
+                  </div>
+                </div>
+                <div class="step">
+                  <div class="step-n">03</div>
+                  <div class="step-b">
+                    <div class="step-t">Growing in Japan’s tech industry</div>
+                    <div class="step-d">I’m focused on becoming a developer who ships reliable, maintainable systems.</div>
+                  </div>
+                </div>
+              </div>
+              <div class="about-actions">
+                <a class="btn btn-primary" href="#projects">Explore Work</a>
+                <a class="btn btn-ghost" href="./resume.html" target="_blank" rel="noopener noreferrer">Resume</a>
+              </div>
             </div>
+
           </div>
         </div>
       </section>
@@ -103,62 +174,57 @@
       <section class="section" id="skills">
         <div class="container">
           <div class="section-head">
-            <h2 class="section-title">Skills</h2>
-            <p class="section-subtitle">Java / JS / SQL</p>
+            <h2 class="section-title">Skills & Tech Stack</h2>
+            <p class="section-subtitle">A focused toolkit for modern, user-first development.</p>
           </div>
 
           <div class="grid three-col">
-            <article class="skill card">
-              <div class="skill-top">
-                <span class="skill-icon" aria-hidden="true">☕</span>
-                <h3 class="card-title">Java</h3>
+            <article class="stack card" data-reveal="up" data-tilt>
+              <div class="stack-head">
+                <div class="stack-icon" aria-hidden="true">◇</div>
+                <div>
+                  <h3 class="card-title">Frontend</h3>
+                  <div class="card-sub">Interfaces that feel premium and fast.</div>
+                </div>
               </div>
-              <p class="card-text">
-                APIs, OOP, data structures, and clean architecture patterns.
-              </p>
-              <div class="meter" role="meter" aria-label="Java proficiency" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100">
-                <div class="meter-bar" style="width: 80%"></div>
-              </div>
-              <div class="tags">
-                <span class="tag">OOP</span>
-                <span class="tag">REST</span>
-                <span class="tag">Testing</span>
-              </div>
-            </article>
-
-            <article class="skill card">
-              <div class="skill-top">
-                <span class="skill-icon" aria-hidden="true">⚡</span>
-                <h3 class="card-title">JavaScript</h3>
-              </div>
-              <p class="card-text">
-                DOM, async patterns, UI behavior, and accessibility basics.
-              </p>
-              <div class="meter" role="meter" aria-label="JavaScript proficiency" aria-valuenow="78" aria-valuemin="0" aria-valuemax="100">
-                <div class="meter-bar" style="width: 78%"></div>
-              </div>
-              <div class="tags">
-                <span class="tag">DOM</span>
-                <span class="tag">Fetch</span>
-                <span class="tag">ES6+</span>
+              <div class="chips">
+                <span class="chip">HTML</span>
+                <span class="chip">CSS</span>
+                <span class="chip">JavaScript</span>
+                <span class="chip">Accessibility</span>
+                <span class="chip">Responsive UI</span>
               </div>
             </article>
 
-            <article class="skill card">
-              <div class="skill-top">
-                <span class="skill-icon" aria-hidden="true">🗄</span>
-                <h3 class="card-title">SQL</h3>
+            <article class="stack card" data-reveal="up" data-tilt>
+              <div class="stack-head">
+                <div class="stack-icon" aria-hidden="true">▣</div>
+                <div>
+                  <h3 class="card-title">Backend</h3>
+                  <div class="card-sub">Clean logic, data, and APIs.</div>
+                </div>
               </div>
-              <p class="card-text">
-                Relational modeling, joins, indexing basics, and reporting queries.
-              </p>
-              <div class="meter" role="meter" aria-label="SQL proficiency" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">
-                <div class="meter-bar" style="width: 75%"></div>
+              <div class="chips">
+                <span class="chip">Java</span>
+                <span class="chip">SQL</span>
+                <span class="chip">CRUD</span>
+                <span class="chip">REST</span>
               </div>
-              <div class="tags">
-                <span class="tag">Joins</span>
-                <span class="tag">Indexes</span>
-                <span class="tag">Schemas</span>
+            </article>
+
+            <article class="stack card" data-reveal="up" data-tilt>
+              <div class="stack-head">
+                <div class="stack-icon" aria-hidden="true">⟡</div>
+                <div>
+                  <h3 class="card-title">Tools</h3>
+                  <div class="card-sub">Shipping and iterating with discipline.</div>
+                </div>
+              </div>
+              <div class="chips">
+                <span class="chip">Git</span>
+                <span class="chip">Firebase</span>
+                <span class="chip">Vercel</span>
+                <span class="chip">DevTools</span>
               </div>
             </article>
           </div>
@@ -168,38 +234,141 @@
       <section class="section" id="projects">
         <div class="container">
           <div class="section-head">
-            <h2 class="section-title">Projects</h2>
+            <h2 class="section-title">Featured Projects</h2>
+            <p class="section-subtitle">Product-like showcases with clean UI and real functionality.</p>
           </div>
 
           <div class="grid three-col">
-            <article class="project card">
-              <div class="project-badge">Java</div>
-              <h3 class="card-title"><a href="./todo-app/index.html" target="_blank" rel="noopener noreferrer">Task Tracker API</a></h3>
-              <p class="card-text">
-                HTML、CSS、JavaScriptを用いて、レスポンシブなTo-Doアプリを作成しました。タスクの追加・編集・削除、フィルター機能、キーボード操作、●アイコンによるダーク/ライトモード切替を実装。
-                DOM操作、イベント処理、localStorage、モバイル対応レスポンシブデザインを学びました。
-              </p>
+            <article class="project card" data-reveal="up" data-tilt>
+              <div class="project-media pm-weather" aria-hidden="true">
+                <div class="project-media-title">Weather App</div>
+              </div>
+              <div class="project-body">
+                <div class="project-top">
+                  <h3 class="project-title">Weather App</h3>
+                  <div class="project-tags">
+                    <span class="tag">JavaScript</span>
+                    <span class="tag">API</span>
+                    <span class="tag">UI</span>
+                  </div>
+                </div>
+                <p class="card-text">
+                  A responsive weather experience with location support, clean forecasts, and smooth interactions.
+                </p>
+                <div class="project-links">
+                  <a class="btn btn-small btn-primary" href="./weather-app/index.html" target="_blank" rel="noopener noreferrer">Live Demo</a>
+                  <a class="btn btn-small btn-ghost" href="#" data-disabled="true" aria-disabled="true">GitHub</a>
+                </div>
+              </div>
             </article>
 
-            <article class="project card">
-              <div class="project-badge">JavaScript</div>
-              <h3 class="card-title"><a href="./weather-app/index.html">Weather app</a></h3>
-              <p class="card-text">
-                リアルタイムで天気情報を表示するWebアプリケーションを開発しました。都市名検索に加え、Geolocation APIを用いた現在地の自動取得にも対応しています。
-                現在の気温・天気・風速・現地時間の表示に加え、7日間の天気予報を分かりやすく表示します。また、10分ごとの自動更新機能やダークモード切替など、ユーザー体験を意識した機能を実装しました。
-                本アプリを通して、JavaScriptによるAPI連携、非同期処理、DOM操作、そしてユーザー視点でのUI設計を実践的に学びました。
-              </p>
+            <article class="project card" data-reveal="up" data-tilt>
+              <div class="project-media pm-todo" aria-hidden="true">
+                <div class="project-media-title">To-Do App</div>
+              </div>
+              <div class="project-body">
+                <div class="project-top">
+                  <h3 class="project-title">To-Do App</h3>
+                  <div class="project-tags">
+                    <span class="tag">JavaScript</span>
+                    <span class="tag">LocalStorage</span>
+                    <span class="tag">UX</span>
+                  </div>
+                </div>
+                <p class="card-text">A clean task manager with filters, completion states, and lightweight persistence.</p>
+                <div class="project-links">
+                  <a class="btn btn-small btn-primary" href="./todo-app/index.html" target="_blank" rel="noopener noreferrer">Live Demo</a>
+                  <a class="btn btn-small btn-ghost" href="#" data-disabled="true" aria-disabled="true">GitHub</a>
+                </div>
+              </div>
             </article>
 
-
-            <article class="project card">
-              <div class="project-badge">HTM, CSS and JavaScript</div>
-              <h3 class="card-title"><a href="./calculator/index.html" target="_blank" rel="noopener noreferrer">Calculator</a></h3>
-              <p class="card-text">
-                JavaScriptで科学計算機アプリを開発しました。特に、evalを使わずに自分で数式パーサーを実装し、安全な計算処理を実現した点に力を入れました。
-                また、DEG/RADの切替や計算履歴の保存など、実用性を意識した機能を追加しました。さらに、エラー処理やUIの工夫により、ユーザー視点で使いやすい設計を行いました。
-              </p>
+            <article class="project card" data-reveal="up" data-tilt>
+              <div class="project-media pm-calculator" aria-hidden="true">
+                <div class="project-media-title">Calculator</div>
+              </div>
+              <div class="project-body">
+                <div class="project-top">
+                  <h3 class="project-title">Calculator App</h3>
+                  <div class="project-tags">
+                    <span class="tag">JavaScript</span>
+                    <span class="tag">Scientific</span>
+                    <span class="tag">UI</span>
+                  </div>
+                </div>
+                <p class="card-text">A calculator with scientific functions, history, and a theme toggle for daily use.</p>
+                <div class="project-links">
+                  <a class="btn btn-small btn-primary" href="./calculator/index.html" target="_blank" rel="noopener noreferrer">Live Demo</a>
+                  <a class="btn btn-small btn-ghost" href="#" data-disabled="true" aria-disabled="true">GitHub</a>
+                </div>
+              </div>
             </article>
+
+            <article class="project card" data-reveal="up" data-tilt>
+              <div class="project-media pm-portfolio" aria-hidden="true">
+                <div class="project-media-title">Portfolio</div>
+              </div>
+              <div class="project-body">
+                <div class="project-top">
+                  <h3 class="project-title">Portfolio Website</h3>
+                  <div class="project-tags">
+                    <span class="tag">HTML</span>
+                    <span class="tag">CSS</span>
+                    <span class="tag">JS</span>
+                  </div>
+                </div>
+                <p class="card-text">
+                  A premium, interactive portfolio with micro-interactions, scroll animations, and glass UI.
+                </p>
+                <div class="project-links">
+                  <a class="btn btn-small btn-primary" href="#home">Live Demo</a>
+                  <a class="btn btn-small btn-ghost" href="#" data-disabled="true" aria-disabled="true">GitHub</a>
+                </div>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="timeline">
+        <div class="container">
+          <div class="section-head">
+            <h2 class="section-title">Experience & Growth</h2>
+            <p class="section-subtitle">Milestones that show momentum.</p>
+          </div>
+
+          <div class="timeline" data-reveal="up">
+            <div class="timeline-line" aria-hidden="true"></div>
+            <div class="timeline-item">
+              <div class="timeline-dot" aria-hidden="true"></div>
+              <div class="timeline-card">
+                <div class="timeline-top">
+                  <div class="timeline-title">Started building consistently</div>
+                  <div class="timeline-time">Foundation</div>
+                </div>
+                <div class="timeline-text">Turned learning into shipping: small apps, clean UI, stronger fundamentals.</div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot" aria-hidden="true"></div>
+              <div class="timeline-card">
+                <div class="timeline-top">
+                  <div class="timeline-title">Projects with real UX</div>
+                  <div class="timeline-time">Iteration</div>
+                </div>
+                <div class="timeline-text">Focused on responsiveness, accessibility basics, and delightful interactions.</div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot" aria-hidden="true"></div>
+              <div class="timeline-card">
+                <div class="timeline-top">
+                  <div class="timeline-title">Next: production-ready systems</div>
+                  <div class="timeline-time">Growth</div>
+                </div>
+                <div class="timeline-text">Deepening backend skills and building maintainable apps for real users.</div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -208,15 +377,39 @@
         <div class="container">
           <div class="section-head">
             <h2 class="section-title">Contact</h2>
+            <p class="section-subtitle">Let’s build something amazing together.</p>
           </div>
 
           <div class="grid two-col">
-            <div class="card">
-              <h3 class="card-title">Let’s connect</h3>
+            <div class="card contact-card" data-reveal="up" data-tilt>
+              <h3 class="card-title">Direct</h3>
               <div class="contact-items">
                 <a class="contact-item" href="mailto:ck25304015@ga.ttc.ac.jp">
                   <span class="contact-label">Email</span>
                   <span class="contact-value">ck25304015@ga.ttc.ac.jp</span>
+                </a>
+                <div class="contact-item">
+                  <span class="contact-label">Location</span>
+                  <span class="contact-value">Japan</span>
+                </div>
+              </div>
+
+              <div class="socials">
+                <a class="social" href="#" data-disabled="true" aria-disabled="true" aria-label="GitHub">
+                  <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+                    <path
+                      fill="currentColor"
+                      d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.77.6-3.35-1.18-3.35-1.18c-.45-1.14-1.1-1.44-1.1-1.44c-.9-.62.07-.6.07-.6c1 .07 1.52 1.03 1.52 1.03c.89 1.52 2.34 1.08 2.9.83c.09-.64.35-1.08.63-1.33c-2.21-.25-4.54-1.11-4.54-4.95c0-1.09.39-1.98 1.03-2.68c-.1-.25-.45-1.27.1-2.64c0 0 .84-.27 2.75 1.02A9.56 9.56 0 0 1 12 6.84c.85 0 1.7.11 2.5.33c1.9-1.29 2.74-1.02 2.74-1.02c.55 1.37.2 2.39.1 2.64c.64.7 1.03 1.59 1.03 2.68c0 3.85-2.34 4.69-4.57 4.94c.36.31.69.93.69 1.88v2.79c0 .26.18.58.69.48A10 10 0 0 0 12 2Z"
+                    />
+                  </svg>
+                </a>
+                <a class="social" href="#" data-disabled="true" aria-disabled="true" aria-label="LinkedIn">
+                  <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+                    <path
+                      fill="currentColor"
+                      d="M4.98 3.5A2.5 2.5 0 0 1 7.5 6a2.5 2.5 0 0 1-2.52 2.5A2.5 2.5 0 0 1 2.5 6A2.5 2.5 0 0 1 4.98 3.5ZM3 21V9h4v12H3Zm7 0V9h3.8v1.64h.06c.53-.95 1.83-1.95 3.77-1.95c4.03 0 4.77 2.65 4.77 6.1V21h-4v-5.5c0-1.31-.02-3-1.83-3c-1.83 0-2.11 1.43-2.11 2.9V21h-3.96Z"
+                    />
+                  </svg>
                 </a>
               </div>
             </div>
@@ -224,21 +417,29 @@
             <form
               class="card form"
               id="contact-form"
+              action="https://formsubmit.co/ck25304015@ga.ttc.ac.jp"
+              method="POST"
               novalidate
+              data-reveal="up"
             >
-              <div class="form-row">
+              <input type="hidden" name="_subject" value="New portfolio message" />
+              <input type="hidden" name="_captcha" value="false" />
+              <input type="hidden" name="_template" value="table" />
+              <input type="hidden" name="_next" value="https://my-portfolio9-dun.vercel.app/#contact" />
+
+              <div class="field">
+                <input class="input" id="name" name="name" type="text" autocomplete="name" required minlength="2" placeholder=" " />
                 <label class="label" for="name">Name</label>
-                <input class="input" id="name" name="name" type="text" autocomplete="name" required minlength="2" />
                 <p class="field-error" data-for="name" aria-live="polite"></p>
               </div>
-              <div class="form-row">
+              <div class="field">
+                <input class="input" id="email" name="email" type="email" autocomplete="email" required placeholder=" " />
                 <label class="label" for="email">Email</label>
-                <input class="input" id="email" name="email" type="email" autocomplete="email" required />
                 <p class="field-error" data-for="email" aria-live="polite"></p>
               </div>
-              <div class="form-row">
+              <div class="field">
+                <textarea class="input textarea" id="message" name="message" rows="5" required minlength="10" placeholder=" "></textarea>
                 <label class="label" for="message">Message</label>
-                <textarea class="input textarea" id="message" name="message" rows="5" required minlength="10"></textarea>
                 <p class="field-error" data-for="message" aria-live="polite"></p>
               </div>
 
@@ -256,8 +457,12 @@
 
     <footer class="site-footer">
       <div class="container footer-inner">
-        <p class="footer-text">© <span id="year"></span> KARKI CHAKRA. All rights reserved.</p>
-        <a class="back-to-top" href="#top">Back to top</a>
+        <p class="footer-text">© <span id="year"></span> Karki Chakra</p>
+        <div class="footer-links">
+          <a class="footer-link" href="#projects">Projects</a>
+          <a class="footer-link" href="#contact">Contact</a>
+          <a class="footer-link" href="#top">Top</a>
+        </div>
       </div>
     </footer>
 
@@ -268,7 +473,6 @@
       </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
-    <script src="./script.js"></script>
+    <script src="./script.js?v=20260420-7"></script>
   </body>
 </html>
