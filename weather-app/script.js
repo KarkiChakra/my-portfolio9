@@ -378,7 +378,56 @@ function getWeatherByLocation() {
         renderMessage("Unable to fetch weather right now.");
       }
     },
-    () => renderMessage("Location permission denied.")
+    async err => {
+      if (err && err.code === 1) {
+        try {
+          const res = await fetch(
+            `https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=auto:ip&days=7&aqi=no`
+          );
+          const data = await res.json();
+
+          if (data.error) return renderMessage("Location permission denied.");
+
+          const todayAstro = data?.forecast?.forecastday?.[0]?.astro;
+          const weather = {
+            name: data.location.name,
+            country: data.location.country,
+            tempC: data.current.temp_c,
+            tempF: data.current.temp_f,
+            condition: data.current.condition.text,
+            icon: data.current.condition.icon,
+            wind: data.current.wind_kph,
+            localtime: data.location.localtime,
+            sunrise: todayAstro?.sunrise,
+            sunset: todayAstro?.sunset
+          };
+
+          const isDay = isDayFromSunTimes(weather);
+          lastThemeContext = isDay == null ? null : { isDay };
+          const pref = getThemePref();
+          if (pref === "auto") applyThemeFromPref(pref, lastThemeContext);
+
+          renderWeather(weather);
+          let forecastDays = data?.forecast?.forecastday || [];
+          if (
+            forecastDays.length < 7 &&
+            Number.isFinite(data?.location?.lat) &&
+            Number.isFinite(data?.location?.lon)
+          ) {
+            try {
+              const openMeteoDays = await fetchOpenMeteoForecastDays(data.location.lat, data.location.lon);
+              if (openMeteoDays.length === 7) forecastDays = openMeteoDays;
+            } catch {}
+          }
+          renderForecast(forecastDays);
+          return;
+        } catch (e) {
+          return renderMessage("Location permission denied.");
+        }
+      }
+
+      renderMessage("Unable to get your location.");
+    }
   );
 }
 

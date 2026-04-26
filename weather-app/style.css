@@ -332,4 +332,8 @@ button {
     font-weight: 600;
     cursor: pointer;
   }
+  .hero-side img {
+  max-height: 420px;
+}
+
 }
