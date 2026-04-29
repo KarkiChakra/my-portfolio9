@@ -381,10 +381,6 @@ const initContactForm = () => {
   const emailInput = qs("#email", form);
   const messageInput = qs("#message", form);
 
-  const isFormSubmitEndpoint =
-    typeof form.action === "string" &&
-    form.action.toLowerCase().includes("formsubmit.co");
-
   const getValue = (el) =>
     el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement
       ? el.value.trim()
@@ -426,19 +422,43 @@ const initContactForm = () => {
     return { valid };
   };
 
-  form.addEventListener("submit", (e) => {
+  form.addEventListener("submit", async (e) => {
     const result = validate();
     if (!result.valid) {
       e.preventDefault();
       note.textContent = "Please fix the errors above.";
       return;
     }
-    if (!isFormSubmitEndpoint) {
-      e.preventDefault();
-      note.textContent = "Form endpoint not configured.";
-      return;
+
+    e.preventDefault();
+    const name = getValue(nameInput);
+    const email = getValue(emailInput);
+    const message = getValue(messageInput);
+    const submitButton = qs('button[type="submit"]', form);
+
+    if (submitButton) submitButton.disabled = true;
+    note.textContent = "Sending...";
+
+    try {
+      const response = await fetch(form.action, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, message }),
+      });
+      const data = await response.json().catch(() => ({}));
+
+      if (!response.ok || !data.ok) {
+        throw new Error(data.message || "Could not send the message.");
+      }
+
+      form.reset();
+      clearErrors();
+      note.textContent = data.message || "Message sent. Thank you!";
+    } catch (error) {
+      note.textContent = error.message || "Could not send the message. Please try again.";
+    } finally {
+      if (submitButton) submitButton.disabled = false;
     }
-    note.textContent = "Submitting...";
   });
 };
 
