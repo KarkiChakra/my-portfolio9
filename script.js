@@ -127,21 +127,26 @@ const initActiveNavLink = () => {
   };
 
   const sections = [...map.keys()];
-  const observer = new IntersectionObserver(
-    (entries) => {
-      const visible = entries
-        .filter((e) => e.isIntersecting)
-        .sort((a, b) => (b.intersectionRatio || 0) - (a.intersectionRatio || 0))[0];
-      if (visible?.target?.id) setActive(visible.target.id);
-    },
-    {
-      root: null,
-      threshold: [0.2, 0.35, 0.5, 0.65],
-      rootMargin: `-${getHeaderOffset()}px 0px -55% 0px`,
-    }
-  );
+  let ticking = false;
 
-  sections.forEach((s) => observer.observe(s));
+  const updateActive = () => {
+    const marker = getHeaderOffset() + 24;
+    const current = sections
+      .filter((section) => section.getBoundingClientRect().top <= marker)
+      .at(-1);
+    if (current?.id) setActive(current.id);
+    ticking = false;
+  };
+
+  const requestUpdate = () => {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(updateActive);
+  };
+
+  updateActive();
+  window.addEventListener("scroll", requestUpdate, { passive: true });
+  window.addEventListener("resize", requestUpdate);
 };
 
 const initTypingEffect = () => {
@@ -391,7 +396,10 @@ const initContactForm = () => {
 
   const setError = (field, message = "") => {
     const el = qs(`.field-error[data-for="${field}"]`, form);
-    if (el) el.textContent = message;
+    if (el) {
+      el.textContent = message;
+      el.style.setProperty("color", "#005f99", "important");
+    }
   };
 
   const clearErrors = () => {

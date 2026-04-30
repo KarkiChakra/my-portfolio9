@@ -6,6 +6,11 @@
     <title>Karki Chakra | Resume</title>
     <meta name="description" content="Resume for Karki Chakra — junior web developer based in Japan." />
     <link rel="stylesheet" href="./styles.css" />
+    <script>
+      if (localStorage.getItem("theme") === "light") {
+        document.documentElement.setAttribute("data-theme", "light");
+      }
+    </script>
   </head>
   <body>
     <a class="skip-link" href="#resume">Skip to content</a>
@@ -17,6 +22,10 @@
           <span class="brand-text">Karki Chakra</span>
         </a>
         <nav class="nav" aria-label="Resume actions">
+          <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle theme">
+            <svg class="sun-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+            <svg class="moon-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display: none;"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+          </button>
           <a class="btn btn-ghost btn-small" href="./index.html#contact">Contact</a>
           <button class="btn btn-primary btn-small" type="button" id="print">Print / Save PDF</button>
         </nav>
@@ -42,6 +51,10 @@
               <a class="contact-item" href="mailto:ck25304015@ga.ttc.ac.jp">
                 <span class="contact-label">Email</span>
                 <span class="contact-value">ck25304015@ga.ttc.ac.jp</span>
+              </a>
+              <a class="contact-item" href="tel:+819035121197">
+                <span class="contact-label">Phone</span>
+                <span class="contact-value">090-3512-1197</span>
               </a>
               <div class="contact-item">
                 <span class="contact-label">Location</span>
@@ -77,6 +90,17 @@
             </p>
             <div class="project-links">
               <a class="btn btn-small btn-primary" href="./weather-app/index.html" target="_blank" rel="noopener noreferrer"
+                >Live Demo</a
+              >
+            </div>
+          </section>
+          <section class="card" data-reveal="up">
+            <h3 class="card-title">To-Do App</h3>
+            <p class="card-text">タスクの追加、完了、削除ができるTo-Doアプリを開発しました。
+                シンプルな操作性と見やすいレイアウトを意識し、日常的に使いやすい設計にしています。
+            </p>
+            <div class="project-links">
+              <a class="btn btn-small btn-primary" href="./todo-app/index.html" target="_blank" rel="noopener noreferrer"
                 >Live Demo</a
               >
             </div>
