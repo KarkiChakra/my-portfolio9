@@ -11,7 +11,7 @@
   --accent: #3dd6b4;
   --accent-2: #69a8ff;
   --accent-3: #f6b756;
-  --danger: #ff668f;
+  --danger: #0284c7;
   --shadow: 0 24px 70px rgba(0, 0, 0, 0.38);
   --shadow-soft: 0 16px 38px rgba(0, 0, 0, 0.26);
   --radius: 8px;
@@ -1184,8 +1184,16 @@ html[data-theme="light"] .hero-roles-caret {
 .field-error {
   min-height: 1.1rem;
   margin: 0;
-  color: var(--danger);
+  color: #0284c7;
   font-size: 0.9rem;
+}
+
+.form .field-error {
+  color: #0284c7 !important;
+}
+
+html[data-theme="light"] .form .field-error {
+  color: #005f99 !important;
 }
 
 .form-note {

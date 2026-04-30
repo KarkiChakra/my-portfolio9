@@ -27,7 +27,16 @@ module.exports = async (req, res) => {
     });
   }
 
-  const { name = "", email = "", message = "" } = req.body || {};
+  let body = req.body || {};
+  if (typeof body === "string") {
+    try {
+      body = JSON.parse(body);
+    } catch {
+      body = {};
+    }
+  }
+
+  const { name = "", email = "", message = "" } = body;
   const cleanName = String(name).trim();
   const cleanEmail = String(email).trim();
   const cleanMessage = String(message).trim();
@@ -39,27 +48,37 @@ module.exports = async (req, res) => {
   const fromEmail = process.env.CONTACT_FROM_EMAIL || "Portfolio Contact <onboarding@resend.dev>";
   const toEmail = process.env.CONTACT_TO_EMAIL || CONTACT_TO_EMAIL;
 
-  const response = await fetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${apiKey}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      from: fromEmail,
-      to: [toEmail],
-      reply_to: cleanEmail,
-      subject: "New portfolio message",
-      text: `Name: ${cleanName}\nEmail: ${cleanEmail}\n\n${cleanMessage}`,
-    }),
-  });
+  try {
+    const response = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        from: fromEmail,
+        to: [toEmail],
+        reply_to: cleanEmail,
+        subject: "New portfolio message",
+        text: `Name: ${cleanName}\nEmail: ${cleanEmail}\n\n${cleanMessage}`,
+      }),
+    });
 
-  if (!response.ok) {
+    const resendData = await response.json().catch(() => ({}));
+
+    if (!response.ok) {
+      const resendMessage =
+        resendData.message ||
+        resendData.error ||
+        "Resend rejected the message. Check your sender email/domain settings.";
+      return json(res, 502, { ok: false, message: resendMessage });
+    }
+
+    return json(res, 200, { ok: true, message: "Message sent. Thank you!" });
+  } catch {
     return json(res, 502, {
       ok: false,
-      message: "Could not send the message right now. Please try again later.",
+      message: "Could not connect to the email service. Please try again later.",
     });
   }
-
-  return json(res, 200, { ok: true, message: "Message sent. Thank you!" });
 };
