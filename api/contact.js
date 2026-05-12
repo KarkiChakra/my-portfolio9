@@ -16,14 +16,14 @@ module.exports = async (req, res) => {
   }
 
   if (req.method !== "POST") {
-    return json(res, 405, { ok: false, message: "Method not allowed." });
+    return json(res, 405, { ok: false, message: "許可されていない送信方法です。" });
   }
 
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) {
     return json(res, 500, {
       ok: false,
-      message: "Email service is not configured. Add RESEND_API_KEY in Vercel.",
+      message: "メール送信サービスが設定されていません。VercelにRESEND_API_KEYを追加してください。",
     });
   }
 
@@ -42,7 +42,7 @@ module.exports = async (req, res) => {
   const cleanMessage = String(message).trim();
 
   if (cleanName.length < 2 || !isValidEmail(cleanEmail) || cleanMessage.length < 10) {
-    return json(res, 400, { ok: false, message: "Please check the form fields." });
+    return json(res, 400, { ok: false, message: "入力内容を確認してください。" });
   }
 
   const fromEmail = process.env.CONTACT_FROM_EMAIL || "Portfolio Contact <onboarding@resend.dev>";
@@ -70,15 +70,15 @@ module.exports = async (req, res) => {
       const resendMessage =
         resendData.message ||
         resendData.error ||
-        "Resend rejected the message. Check your sender email/domain settings.";
+        "メール送信に失敗しました。送信元メールまたはドメイン設定を確認してください。";
       return json(res, 502, { ok: false, message: resendMessage });
     }
 
-    return json(res, 200, { ok: true, message: "Message sent. Thank you!" });
+    return json(res, 200, { ok: true, message: "送信しました。ありがとうございます。" });
   } catch {
     return json(res, 502, {
       ok: false,
-      message: "Could not connect to the email service. Please try again later.",
+      message: "メール送信サービスに接続できませんでした。時間をおいて再度お試しください。",
     });
   }
 };

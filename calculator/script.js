@@ -602,7 +602,6 @@ function evaluateScientific(expression) {
 
 function calculate() {
   const expression = display.value;
-  console.log("INPUT:", expression);
   if (!expression || expression === "Error") {
     return;
   }

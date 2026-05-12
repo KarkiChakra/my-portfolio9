@@ -153,7 +153,7 @@ const initTypingEffect = () => {
   const el = qs("#typed");
   if (!el) return;
 
-  const roles = ["Web Developer", "Problem Solver", "Lifelong Learner"];
+  const roles = ["継続して学び続けること", "問題解決を最後まで諦めないこと", "チームでのコミュニケーション"];
   const state = {
     i: 0,
     t: "",
@@ -415,15 +415,15 @@ const initContactForm = () => {
 
     let valid = true;
     if (name.length < 2) {
-      setError("name", "Please enter at least 2 characters.");
+      setError("name", "2文字以上で入力してください。");
       valid = false;
     }
     if (!isValidEmail(email)) {
-      setError("email", "Please enter a valid email.");
+      setError("email", "正しいメールアドレスを入力してください。");
       valid = false;
     }
     if (message.length < 10) {
-      setError("message", "Please enter at least 10 characters.");
+      setError("message", "10文字以上で入力してください。");
       valid = false;
     }
 
@@ -434,7 +434,7 @@ const initContactForm = () => {
     const result = validate();
     if (!result.valid) {
       e.preventDefault();
-      note.textContent = "Please fix the errors above.";
+      note.textContent = "入力内容を確認してください。";
       return;
     }
 
@@ -445,7 +445,16 @@ const initContactForm = () => {
     const submitButton = qs('button[type="submit"]', form);
 
     if (submitButton) submitButton.disabled = true;
-    note.textContent = "Sending...";
+    note.textContent = "送信中です...";
+
+    if (window.location.protocol === "file:") {
+      const subject = encodeURIComponent(`Portfolio message from ${name}`);
+      const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\n${message}`);
+      window.location.href = `mailto:ck25304015@ga.ttc.ac.jp?subject=${subject}&body=${body}`;
+      note.textContent = "メールアプリを開いています。";
+      if (submitButton) submitButton.disabled = false;
+      return;
+    }
 
     try {
       const response = await fetch(form.action, {
@@ -456,14 +465,14 @@ const initContactForm = () => {
       const data = await response.json().catch(() => ({}));
 
       if (!response.ok || !data.ok) {
-        throw new Error(data.message || "Could not send the message.");
+        throw new Error(data.message || "送信できませんでした。");
       }
 
       form.reset();
       clearErrors();
-      note.textContent = data.message || "Message sent. Thank you!";
+      note.textContent = data.message || "送信しました。ありがとうございます。";
     } catch (error) {
-      note.textContent = error.message || "Could not send the message. Please try again.";
+      note.textContent = error.message || "送信できませんでした。もう一度お試しください。";
     } finally {
       if (submitButton) submitButton.disabled = false;
     }
