@@ -1,4 +1,14 @@
-let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+function loadTasks() {
+    try {
+        const saved = JSON.parse(localStorage.getItem("tasks") || "[]");
+        return Array.isArray(saved) ? saved : [];
+    } catch {
+        localStorage.removeItem("tasks");
+        return [];
+    }
+}
+
+let tasks = loadTasks();
 let editingIndex = null;
 let currentFilter = localStorage.getItem("taskFilter") || "all";
 let theme = localStorage.getItem("theme") || "system";

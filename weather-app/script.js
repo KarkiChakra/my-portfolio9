@@ -1,4 +1,12 @@
-const apiKey = "e1552c854221473db56224049263103";
+async function fetchWeatherApi(query) {
+  try {
+    const res = await fetch(`/api/weather?q=${encodeURIComponent(query)}`);
+    const data = await res.json().catch(() => ({}));
+    if (res.ok) return data;
+  } catch {}
+
+  return fetchOpenMeteoWeather(query);
+}
 
 const THEME_PREF_KEY = "themePref";
 const LAST_AUTO_THEME_KEY = "lastAutoTheme";
@@ -106,6 +114,141 @@ function weatherTextFromWmoCode(code) {
   return "Cloudy";
 }
 
+function formatLocalDateTime(value = new Date()) {
+  if (typeof value === "string") return value.replace("T", " ").slice(0, 16);
+  const d = value instanceof Date ? value : new Date(value);
+  if (Number.isNaN(d.getTime())) return "";
+  const yyyy = d.getFullYear();
+  const mm = String(d.getMonth() + 1).padStart(2, "0");
+  const dd = String(d.getDate()).padStart(2, "0");
+  const hh = String(d.getHours()).padStart(2, "0");
+  const mi = String(d.getMinutes()).padStart(2, "0");
+  return `${yyyy}-${mm}-${dd} ${hh}:${mi}`;
+}
+
+function formatLocalDateTimeFromOffset(utcOffsetSeconds = 0) {
+  const offsetMs = Number(utcOffsetSeconds) * 1000;
+  const d = new Date(Date.now() + offsetMs);
+  if (Number.isNaN(d.getTime())) return formatLocalDateTime();
+  const yyyy = d.getUTCFullYear();
+  const mm = String(d.getUTCMonth() + 1).padStart(2, "0");
+  const dd = String(d.getUTCDate()).padStart(2, "0");
+  const hh = String(d.getUTCHours()).padStart(2, "0");
+  const mi = String(d.getUTCMinutes()).padStart(2, "0");
+  return `${yyyy}-${mm}-${dd} ${hh}:${mi}`;
+}
+
+function formatOpenMeteoTime(value) {
+  if (!value) return null;
+  const d = new Date(value);
+  if (Number.isNaN(d.getTime())) return String(value).split("T")[1] || value;
+  return d.toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" });
+}
+
+function cToF(c) {
+  return Number.isFinite(c) ? Math.round((c * 9) / 5 + 32) : null;
+}
+
+function parseLatLon(query) {
+  const m = String(query).trim().match(/^(-?\d+(?:\.\d+)?),\s*(-?\d+(?:\.\d+)?)$/);
+  if (!m) return null;
+  return { lat: Number(m[1]), lon: Number(m[2]) };
+}
+
+async function resolveOpenMeteoLocation(query) {
+  const coords = parseLatLon(query);
+  if (coords) return reverseGeocodeLocation(coords);
+  if (query === "auto:ip") throw new Error("Location permission denied.");
+
+  const url = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(query)}&count=1&language=en&format=json`;
+  const res = await fetch(url);
+  const data = await res.json().catch(() => ({}));
+  const place = data?.results?.[0];
+  if (!place) throw new Error("City not found.");
+
+  return {
+    lat: place.latitude,
+    lon: place.longitude,
+    name: place.name,
+    country: place.country || "",
+  };
+}
+
+async function reverseGeocodeLocation(coords) {
+  try {
+    const url =
+      `https://nominatim.openstreetmap.org/reverse?format=jsonv2` +
+      `&lat=${encodeURIComponent(coords.lat)}` +
+      `&lon=${encodeURIComponent(coords.lon)}` +
+      `&zoom=10&accept-language=en`;
+    const res = await fetch(url);
+    const data = await res.json().catch(() => ({}));
+    const a = data?.address || {};
+    const name =
+      a.city ||
+      a.town ||
+      a.village ||
+      a.municipality ||
+      a.county ||
+      a.state ||
+      data?.name ||
+      "Current location";
+    return {
+      ...coords,
+      name,
+      country: a.country || "",
+    };
+  } catch {
+    return { ...coords, name: "Current location", country: "" };
+  }
+}
+
+async function fetchOpenMeteoWeather(query) {
+  const location = await resolveOpenMeteoLocation(query);
+  const url =
+    `https://api.open-meteo.com/v1/forecast?latitude=${encodeURIComponent(location.lat)}` +
+    `&longitude=${encodeURIComponent(location.lon)}` +
+    `&current_weather=true` +
+    `&current=temperature_2m,weather_code,wind_speed_10m` +
+    `&daily=weathercode,temperature_2m_max,temperature_2m_min,precipitation_sum,windspeed_10m_max,sunrise,sunset` +
+    `&timezone=auto`;
+
+  const res = await fetch(url);
+  const data = await res.json();
+  const current = data?.current || {};
+  const currentWeather = data?.current_weather || {};
+  const currentTemp = Number.isFinite(Number(currentWeather.temperature))
+    ? Number(currentWeather.temperature)
+    : Number(current.temperature_2m);
+  const windKph = Number.isFinite(Number(currentWeather.windspeed))
+    ? Number(currentWeather.windspeed)
+    : Number(current.wind_speed_10m);
+  const weatherCode = Number.isFinite(Number(currentWeather.weathercode))
+    ? currentWeather.weathercode
+    : current.weather_code;
+  const localtime = formatLocalDateTimeFromOffset(data?.utc_offset_seconds || 0);
+
+  return {
+    location: {
+      name: location.name,
+      country: location.country,
+      lat: location.lat,
+      lon: location.lon,
+      localtime,
+    },
+    current: {
+      temp_c: Number.isFinite(currentTemp) ? Math.round(currentTemp) : null,
+      temp_f: cToF(currentTemp),
+      wind_kph: Number.isFinite(windKph) ? Math.round(windKph) : null,
+      condition: {
+        text: weatherTextFromWmoCode(weatherCode),
+        icon: "",
+      },
+    },
+    forecast: { forecastday: buildOpenMeteoForecastDays(data?.daily) },
+  };
+}
+
 async function fetchOpenMeteoForecastDays(lat, lon) {
   const url =
     `https://api.open-meteo.com/v1/forecast?latitude=${encodeURIComponent(lat)}` +
@@ -115,7 +258,10 @@ async function fetchOpenMeteoForecastDays(lat, lon) {
 
   const res = await fetch(url);
   const data = await res.json();
-  const daily = data?.daily;
+  return buildOpenMeteoForecastDays(data?.daily);
+}
+
+function buildOpenMeteoForecastDays(daily) {
   const times = daily?.time;
   if (!Array.isArray(times) || times.length === 0) return [];
 
@@ -136,13 +282,14 @@ async function fetchOpenMeteoForecastDays(lat, lon) {
         condition: { text: weatherTextFromWmoCode(wmo), icon: "" },
         maxtemp_c: Number.isFinite(maxC) ? maxC : null,
         mintemp_c: Number.isFinite(minC) ? minC : null,
-        daily_chance_of_rain: Number.isFinite(precipMm) ? `${precipMm} mm` : null,
+        daily_chance_of_rain: null,
+        precipitation_sum_mm: Number.isFinite(precipMm) ? precipMm : null,
         maxwind_kph: Number.isFinite(windKph) ? windKph : null,
         avghumidity: null
       },
       astro: {
-        sunrise: sunrise ? String(sunrise).split(" ")[1] || sunrise : null,
-        sunset: sunset ? String(sunset).split(" ")[1] || sunset : null
+        sunrise: formatOpenMeteoTime(sunrise),
+        sunset: formatOpenMeteoTime(sunset)
       }
     });
   }
@@ -162,8 +309,9 @@ function renderMessage(msg) {
 function renderWeather(data) {
   const sunRow =
     data.sunrise && data.sunset
-      ? `<div class="sun-times"><span>🌅 Sunrise: ${data.sunrise}</span><span>🌇 Sunset: ${data.sunset}</span></div>`
+      ? `<div class="sun-times"><span>Sunrise: ${data.sunrise}</span><span>Sunset: ${data.sunset}</span></div>`
       : "";
+  const icon = data.icon ? `<img class="weather-icon" src="https:${data.icon}" alt="">` : "";
 
   const card = `
     <div class="weather-card">
@@ -171,17 +319,17 @@ function renderWeather(data) {
         <div>
           <h2>${data.name}, ${data.country}</h2>
           <div class="weather-condition">
-            <img class="weather-icon" src="https:${data.icon}">
+            ${icon}
             <span>${data.condition}</span>
           </div>
           <div class="weather-time">Local time: ${data.localtime}</div>
         </div>
         <div class="weather-temp">
-          <div class="weather-temp-main">${data.tempC}°C</div>
-          <div class="weather-temp-sub">${data.tempF}°F</div>
+          <div class="weather-temp-main">${data.tempC}&deg;C</div>
+          <div class="weather-temp-sub">${data.tempF}&deg;F</div>
         </div>
       </div>
-      <p>💨 Wind: ${data.wind} km/h</p>
+      <p>Wind: ${data.wind} km/h</p>
       ${sunRow}
     </div>
   `;
@@ -227,24 +375,26 @@ function renderForecast(days) {
     const minF = cToF(d?.day?.mintemp_c);
 
     const chanceRain = d?.day?.daily_chance_of_rain;
+    const precipMm = d?.day?.precipitation_sum_mm;
     const wind = toInt(d?.day?.maxwind_kph);
     const humidity = toInt(d?.day?.avghumidity);
 
     const metaParts = [];
     if (chanceRain != null && chanceRain !== "") metaParts.push(`Rain: ${chanceRain}%`);
+    if (precipMm != null && precipMm !== "") metaParts.push(`Rain: ${precipMm} mm`);
     if (wind != null) metaParts.push(`Wind: ${wind} km/h`);
     if (humidity != null) metaParts.push(`Hum: ${humidity}%`);
 
     const temps =
       maxC != null && minC != null
-        ? `H ${maxC}°C (${maxF}°F) · L ${minC}°C (${minF}°F)`
+        ? `H ${maxC}&deg;C (${maxF}&deg;F) / L ${minC}&deg;C (${minF}&deg;F)`
         : d
           ? ""
           : "No forecast available";
 
     const sunrise = d?.astro?.sunrise;
     const sunset = d?.astro?.sunset;
-    const sunLine = sunrise && sunset ? `🌅 ${sunrise} · 🌇 ${sunset}` : "";
+    const sunLine = sunrise && sunset ? `Sunrise ${sunrise} / Sunset ${sunset}` : "";
 
     const icon = d?.day?.condition?.icon ? `https:${d.day.condition.icon}` : "";
     const conditionText = d?.day?.condition?.text || "";
@@ -260,7 +410,7 @@ function renderForecast(days) {
       <div class="forecast-right">
         <div class="forecast-title">${conditionText}</div>
         <div class="forecast-temps">${temps}</div>
-        <div class="forecast-meta">${metaParts.join(" · ")}</div>
+        <div class="forecast-meta">${metaParts.join(" / ")}</div>
         <div class="forecast-sun">${sunLine}</div>
       </div>
     `;
@@ -287,10 +437,7 @@ async function getWeather() {
   renderMessage("Loading...");
 
   try {
-    const res = await fetch(
-      `https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${city}&days=7&aqi=no`
-    );
-    const data = await res.json();
+    const data = await fetchWeatherApi(city);
 
     if (data.error) return renderMessage(data.error.message);
 
@@ -339,10 +486,7 @@ function getWeatherByLocation() {
       try {
         const { latitude, longitude } = pos.coords;
 
-        const res = await fetch(
-          `https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${latitude},${longitude}&days=7&aqi=no`
-        );
-        const data = await res.json();
+        const data = await fetchWeatherApi(`${latitude},${longitude}`);
 
         if (data.error) return renderMessage(data.error.message);
 
@@ -381,10 +525,7 @@ function getWeatherByLocation() {
     async err => {
       if (err && err.code === 1) {
         try {
-          const res = await fetch(
-            `https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=auto:ip&days=7&aqi=no`
-          );
-          const data = await res.json();
+          const data = await fetchWeatherApi("auto:ip");
 
           if (data.error) return renderMessage("Location permission denied.");
 

@@ -3,9 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Karki Chakra | Resume</title>
-    <meta name="description" content="Resume for Karki Chakra — junior web developer based in Japan." />
-    <link rel="stylesheet" href="./styles.css" />
+    <title>Karki Chakra | 履歴書</title>
+    <meta name="description" content="日本でWeb開発を学ぶKarki Chakraの履歴書です。" />
+    <link rel="stylesheet" href="./styles.css?v=20260512-1" />
     <script>
       if (localStorage.getItem("theme") === "light") {
         document.documentElement.setAttribute("data-theme", "light");
@@ -13,117 +13,125 @@
     </script>
   </head>
   <body>
-    <a class="skip-link" href="#resume">Skip to content</a>
+    <a class="skip-link" href="#resume">本文へスキップ</a>
 
     <header class="site-header" id="site-header">
       <div class="container header-inner">
-        <a class="brand" href="./index.html#home" aria-label="Back to portfolio">
-          <span class="brand-mark" aria-hidden="true"></span>
+        <a class="brand" href="./index.html#home" aria-label="ポートフォリオへ戻る">
+          <span class="brand-mark" aria-hidden="true">KC</span>
           <span class="brand-text">Karki Chakra</span>
         </a>
-        <nav class="nav" aria-label="Resume actions">
+        <nav class="nav" aria-label="履歴書の操作">
           <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle theme">
             <svg class="sun-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
             <svg class="moon-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display: none;"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
           </button>
-          <a class="btn btn-ghost btn-small" href="./index.html#contact">Contact</a>
-          <button class="btn btn-primary btn-small" type="button" id="print">Print / Save PDF</button>
+          <a class="btn btn-ghost btn-small" href="./index.html#projects">制作物</a>
+          <a class="btn btn-ghost btn-small" href="./index.html#contact">お問い合わせ</a>
+          <button class="btn btn-primary btn-small" type="button" id="print">印刷 / PDF保存</button>
         </nav>
       </div>
     </header>
 
-    <main class="section" id="resume">
+    <main class="section resume-page" id="resume">
       <div class="container">
-        <div class="section-head">
-          <h1 class="section-title">Resume</h1>
-          <p class="section-subtitle">Webエンジニアを目指しています • Japan</p>
-        </div>
-
-        <div class="grid two-col">
-          <section class="card" data-reveal="up">
-            <h2 class="card-title">Profile</h2>
-            <p class="card-text">
-              カルキチャクラと申します。現在、東京テクニカルカレッジ情報処理科の2年生で、Web開発を中心に学習しております。
-              HTML、CSS、JavaScript、Java、SQLなどの基礎を学びながら、個人でもWebアプリの開発に取り組んでいます。
-              将来はWebエンジニアとして、ユーザーにとって使いやすいサービスを提供できるようになりたいと考えております。
+        <section class="resume-hero card" data-reveal="up">
+          <div>
+            <div class="section-kicker">履歴書</div>
+            <h1 class="section-title">Karki Chakra</h1>
+            <p class="section-subtitle">
+              現在、プログラミングとデータベースの基礎を学んでいます。
+              基礎をしっかり身につけながら、少しずつ実際に動くものを作れるように努力しています。
             </p>
-            <div class="contact-items">
-              <a class="contact-item" href="mailto:ck25304015@ga.ttc.ac.jp">
-                <span class="contact-label">Email</span>
-                <span class="contact-value">ck25304015@ga.ttc.ac.jp</span>
-              </a>
-              <a class="contact-item" href="tel:+819035121197">
-                <span class="contact-label">Phone</span>
-                <span class="contact-value">090-3512-1197</span>
-              </a>
-              <div class="contact-item">
-                <span class="contact-label">Location</span>
-                <span class="contact-value">Japan</span>
-              </div>
-            </div>
+          </div>
+          <div class="resume-contact">
+            <a href="mailto:ck25304015@ga.ttc.ac.jp">ck25304015@ga.ttc.ac.jp</a>
+            <a href="tel:+819035121197">090-3512-1197</a>
+            <span>日本</span>
+            <a href="https://github.com/KarkiChakra/my-portfolio9" target="_blank" rel="noopener noreferrer">GitHubポートフォリオ</a>
+          </div>
+        </section>
+
+        <div class="grid two-col resume-grid">
+          <section class="card" data-reveal="up">
+            <h2 class="card-title">プロフィール</h2>
+            <p class="card-text">
+              プログラミングとデータベースの基礎を中心に学習しています。
+              基本文法、データの扱い方、処理の流れを理解しながら、少しずつ実践的な制作にも取り組んでいます。
+            </p>
           </section>
 
           <section class="card" data-reveal="up">
-            <h2 class="card-title">Core Skills</h2>
+            <h2 class="card-title">主なスキル</h2>
             <div class="chips">
               <span class="chip">HTML</span>
               <span class="chip">CSS</span>
               <span class="chip">JavaScript</span>
               <span class="chip">Java</span>
               <span class="chip">SQL</span>
+              <span class="chip">REST API</span>
               <span class="chip">Git</span>
-              <span class="chip">C</span>
+              <span class="chip">Vercel</span>
             </div>
           </section>
         </div>
 
-        <div class="section-head" style="margin-top: 1.6rem">
-          <h2 class="section-title">Projects</h2>
-          <p class="section-subtitle">Selected work that demonstrates progress and product thinking.</p>
+        <div class="section-head resume-section-head">
+          <div class="section-kicker">制作物</div>
+          <h2 class="section-title">主なプロジェクト</h2>
+          <p class="section-subtitle">UI、状態管理、API連携、JavaScriptのロジックを学ぶために制作したプロジェクトです。</p>
         </div>
 
         <div class="grid three-col">
           <section class="card" data-reveal="up">
-            <h3 class="card-title">Weather App</h3>
-            <p class="card-text">APIを活用し、現在地に基づいた天気情報を表示するWebアプリを開発しました。
-                  レスポンシブ対応と直感的なUIにより、快適に利用できる設計にしています。
+            <h3 class="card-title">天気アプリ</h3>
+            <p class="card-text">
+              都市名検索、現在地取得、7日間予報表示に対応した天気アプリです。
+              APIキーをフロントエンドに出さないよう、バックエンドのプロキシも利用しています。
             </p>
             <div class="project-links">
-              <a class="btn btn-small btn-primary" href="./weather-app/index.html" target="_blank" rel="noopener noreferrer"
-                >Live Demo</a
-              >
+              <a class="btn btn-small btn-primary" href="./weather-app/index.html" target="_blank" rel="noopener noreferrer">デモを見る</a>
             </div>
           </section>
+
           <section class="card" data-reveal="up">
-            <h3 class="card-title">To-Do App</h3>
-            <p class="card-text">タスクの追加、完了、削除ができるTo-Doアプリを開発しました。
-                シンプルな操作性と見やすいレイアウトを意識し、日常的に使いやすい設計にしています。
+            <h3 class="card-title">To-Doアプリ</h3>
+            <p class="card-text">
+              タスクの作成、編集、削除、フィルター、完了状態、ドラッグでの並び替え、
+              データ保存、壊れた保存データからの復旧に対応したタスク管理アプリです。
             </p>
             <div class="project-links">
-              <a class="btn btn-small btn-primary" href="./todo-app/index.html" target="_blank" rel="noopener noreferrer"
-                >Live Demo</a
-              >
+              <a class="btn btn-small btn-primary" href="./todo-app/index.html" target="_blank" rel="noopener noreferrer">デモを見る</a>
             </div>
           </section>
+
           <section class="card" data-reveal="up">
-            <h3 class="card-title">Portfolio Website</h3>
-            <p class="card-text">日常的に使いやすい電卓アプリを開発しました。
-                履歴機能やテーマ切り替えなど、利便性を高める工夫をしています。
+            <h3 class="card-title">科学計算機</h3>
+            <p class="card-text">
+              式の解析、科学計算機能、角度モード、キーボード操作、計算履歴に対応した電卓アプリです。
             </p>
             <div class="project-links">
-              <a class="btn btn-small btn-primary" href="./index.html#home">Open</a>
+              <a class="btn btn-small btn-primary" href="./calculator/index.html" target="_blank" rel="noopener noreferrer">デモを見る</a>
             </div>
           </section>
+        </div>
+
+        <div class="grid two-col resume-grid">
           <section class="card" data-reveal="up">
-            <h3 class="card-title">Calculator</h3>
-            <p class="card-text">日常的に使いやすい電卓アプリを開発しました。
-                履歴機能やテーマ切り替えなど、利便性を高める工夫をしています。
+            <h2 class="card-title">学習内容</h2>
+            <p class="card-text">
+              日本でプログラミングとデータベースの基礎を学んでいます。
+              実用的な開発ができるジュニア開発者を目指しています。
             </p>
-            <div class="project-links">
-              <a class="btn btn-small btn-primary" href="./calculator/index.html" target="_blank" rel="noopener noreferrer"
-                >Live Demo</a
-              >
-            </div>
+          </section>
+
+          <section class="card" data-reveal="up">
+            <h2 class="card-title">現在力を入れていること</h2>
+            <ul class="project-highlights resume-list">
+              <li>JavaScriptの構成力とデバッグ力を高めること。</li>
+              <li>JavaとSQLを使ったバックエンドの基礎を深めること。</li>
+              <li>デプロイ、APIの扱い、保守しやすいプロジェクト構成を練習すること。</li>
+            </ul>
           </section>
         </div>
       </div>
@@ -131,10 +139,10 @@
 
     <footer class="site-footer">
       <div class="container footer-inner">
-        <p class="footer-text">© <span id="year"></span> Karki Chakra</p>
+        <p class="footer-text">&copy; <span id="year"></span> Karki Chakra</p>
         <div class="footer-links">
-          <a class="footer-link" href="./index.html#home">Portfolio</a>
-          <a class="footer-link" href="./index.html#contact">Contact</a>
+          <a class="footer-link" href="./index.html#home">ポートフォリオ</a>
+          <a class="footer-link" href="./index.html#contact">お問い合わせ</a>
         </div>
       </div>
     </footer>
