@@ -909,6 +909,19 @@ html[data-theme="light"] .hero-roles-caret {
     linear-gradient(315deg, rgba(61, 214, 180, 0.18), transparent 44%);
 }
 
+.pm-language::before {
+  background:
+    radial-gradient(circle at 18% 22%, rgba(251, 113, 133, 0.34), transparent 24%),
+    linear-gradient(135deg, rgba(61, 214, 180, 0.26), transparent 42%),
+    linear-gradient(315deg, rgba(105, 168, 255, 0.25), transparent 45%);
+}
+
+.pm-inventory::before {
+  background:
+    linear-gradient(135deg, rgba(20, 184, 166, 0.26), transparent 42%),
+    linear-gradient(315deg, rgba(251, 146, 60, 0.22), transparent 45%);
+}
+
 .browser-bar {
   position: relative;
   z-index: 1;
@@ -927,7 +940,10 @@ html[data-theme="light"] .hero-roles-caret {
 .weather-preview,
 .todo-preview,
 .calc-preview,
-.portfolio-preview {
+.portfolio-preview,
+.battle-preview,
+.inventory-preview,
+.language-preview {
   position: relative;
   z-index: 1;
   margin: 0.7rem;
@@ -1031,6 +1047,144 @@ html[data-theme="light"] .hero-roles-caret {
   height: 22px;
   border-radius: var(--radius);
   background: var(--accent);
+}
+
+.inventory-preview {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+  padding: 0.7rem;
+}
+
+.inventory-preview span {
+  display: block;
+  min-height: 30px;
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.58);
+}
+
+.inventory-preview span:first-child {
+  grid-column: 1 / -1;
+  min-height: 18px;
+  width: 78%;
+}
+
+.battle-preview {
+  min-height: 84px;
+}
+
+.language-preview {
+  min-height: 84px;
+  overflow: hidden;
+}
+
+.language-avatar,
+.language-heart,
+.language-pill {
+  position: absolute;
+}
+
+.language-avatar {
+  left: 16%;
+  top: 22%;
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border: 2px solid rgba(255, 255, 255, 0.75);
+  border-radius: 99px;
+  background: #f8fafc;
+  color: #0f172a;
+  font-weight: 900;
+  font-size: 0.78rem;
+}
+
+.language-avatar.second {
+  left: auto;
+  right: 16%;
+  top: 22%;
+  background: #ffedd5;
+}
+
+.language-heart {
+  left: calc(50% - 8px);
+  top: 30%;
+  width: 16px;
+  height: 16px;
+  background: #fb7185;
+  transform: rotate(45deg);
+}
+
+.language-heart::before,
+.language-heart::after {
+  content: "";
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border-radius: 99px;
+  background: #fb7185;
+}
+
+.language-heart::before {
+  left: -8px;
+}
+
+.language-heart::after {
+  top: -8px;
+}
+
+.language-pill {
+  left: 14%;
+  bottom: 16%;
+  padding: 0.34rem 0.62rem;
+  border-radius: 99px;
+  background: rgba(255, 255, 255, 0.72);
+  color: #0f172a;
+  font-size: 0.7rem;
+  font-weight: 900;
+}
+
+.language-pill.second {
+  left: auto;
+  right: 12%;
+}
+
+.battle-player,
+.battle-shot {
+  position: absolute;
+  display: grid;
+  place-items: center;
+}
+
+.battle-player {
+  width: 38px;
+  height: 38px;
+  border-radius: 99px;
+  color: #06101a;
+  font-weight: 900;
+  font-size: 0.78rem;
+}
+
+.battle-player.p1 {
+  left: 18%;
+  top: 48%;
+  background: #34d399;
+}
+
+.battle-player.p2 {
+  right: 18%;
+  top: 28%;
+  background: #fb7185;
+}
+
+.battle-shot {
+  left: 48%;
+  top: 48%;
+  width: 52px;
+  height: 4px;
+  border-radius: 99px;
+  background: rgba(255, 255, 255, 0.72);
+  transform: rotate(-18deg);
 }
 
 .project-top {

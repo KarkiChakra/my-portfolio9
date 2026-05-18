@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>在庫管理システム Inventory Management</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <a class="back-btn" href="../index.html#projects">戻る</a>
+
+  <main class="app-shell">
+    <section class="login-screen" id="loginScreen" aria-labelledby="loginTitle">
+      <div class="login-card">
+        <p class="eyebrow">在庫管理 Inventory Management</p>
+        <h1 id="loginTitle">ログイン</h1>
+        <form id="loginForm" class="form-grid">
+          <label>
+            メールアドレス Email
+            <input id="emailInput" type="email" autocomplete="email" placeholder="メールアドレスを入力" list="savedEmailList" required>
+            <datalist id="savedEmailList"></datalist>
+          </label>
+          <label>
+            パスワード Password
+            <input id="passwordInput" type="password" autocomplete="current-password" placeholder="パスワードを入力" required>
+          </label>
+          <label>
+            権限 Role
+            <select id="roleInput">
+              <option value="admin">管理者 Admin</option>
+              <option value="staff">スタッフ Staff</option>
+              <option value="viewer">閲覧のみ Viewer</option>
+            </select>
+          </label>
+          <button class="primary-btn" type="submit">ログイン</button>
+        </form>
+      </div>
+    </section>
+
+    <section class="dashboard-screen" id="dashboardScreen" hidden>
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">ダッシュボード Dashboard</p>
+          <h1>在庫管理システム</h1>
+        </div>
+        <div class="topbar-actions">
+          <span class="role-badge" id="roleBadge">権限: 管理者</span>
+          <span class="connection-status offline" id="connectionStatus">リアルタイム未接続</span>
+          <button class="ghost-btn" id="themeToggle" type="button" aria-label="テーマ切替">テーマ</button>
+          <button class="ghost-btn" id="logoutBtn" type="button">ログアウト</button>
+        </div>
+      </header>
+
+      <section class="summary-grid" aria-label="ダッシュボード集計">
+        <article class="summary-card">
+          <span>商品数</span>
+          <strong id="totalProducts">0</strong>
+        </article>
+        <article class="summary-card">
+          <span>総在庫数</span>
+          <strong id="totalStock">0</strong>
+        </article>
+        <article class="summary-card warning">
+          <span>在庫不足商品</span>
+          <strong id="lowStock">0</strong>
+        </article>
+        <article class="summary-card">
+          <span>在庫金額</span>
+          <strong id="stockValue">JPY 0</strong>
+        </article>
+      </section>
+
+      <div class="alert-banner" id="lowStockAlert" hidden>
+        在庫が少ない商品があります。数量が5未満の商品を確認してください。
+      </div>
+
+      <section class="panel chart-panel" aria-labelledby="chartTitle">
+        <div class="panel-head">
+          <div>
+            <p class="eyebrow">グラフ Charts</p>
+            <h2 id="chartTitle">在庫数グラフ</h2>
+          </div>
+        </div>
+        <canvas id="stockChart" width="900" height="260" aria-label="在庫数グラフ"></canvas>
+      </section>
+
+      <section class="workspace">
+        <aside class="panel control-panel">
+          <div class="panel-head">
+            <div>
+              <p class="eyebrow">商品登録</p>
+              <h2>商品登録 Product Registration</h2>
+            </div>
+          </div>
+
+          <form id="productForm" class="form-grid" autocomplete="off">
+            <label>
+              商品名 Product name
+              <input id="productName" type="text" placeholder="ワイヤレスマウス" required>
+            </label>
+            <label>
+              商品番号 Product code
+              <input id="productCode" type="text" placeholder="P-1001" required>
+            </label>
+            <label>
+              バーコード Barcode
+              <input id="productBarcode" type="text" placeholder="4901234567890">
+            </label>
+            <label>
+              価格 Price
+              <input id="productPrice" type="number" min="0" step="1" value="1000" required>
+            </label>
+            <label>
+              在庫数 Stock quantity
+              <input id="productQuantity" type="number" min="0" step="1" value="10" required>
+            </label>
+            <label>
+              入荷日 Arrival date
+              <input id="arrivalDate" type="date" required>
+            </label>
+            <button class="primary-btn" type="submit">商品を登録</button>
+          </form>
+        </aside>
+
+        <section class="main-panel">
+          <div class="toolbar panel">
+            <div class="search-box">
+              <label for="searchInput">検索 Search</label>
+              <input id="searchInput" type="search" placeholder="商品名・商品番号・バーコードで検索">
+            </div>
+            <div class="scanner-box">
+              <label for="barcodeScanner">バーコードスキャナー Barcode scanner</label>
+              <div class="scanner-row">
+                <input id="barcodeScanner" type="search" placeholder="バーコードを読み取りまたは入力">
+                <button class="ghost-btn" id="scanButton" type="button">カメラ</button>
+              </div>
+              <div class="camera-scanner" id="cameraScanner" hidden>
+                <video id="scannerVideo" autoplay muted playsinline></video>
+                <div class="scanner-overlay" aria-hidden="true"></div>
+                <div class="scanner-actions">
+                  <span id="scannerStatus">バーコードをカメラに向けてください。</span>
+                  <button class="ghost-btn danger" id="stopCameraButton" type="button">停止</button>
+                </div>
+              </div>
+            </div>
+            <label class="sort-box">
+              並び替え Sort
+              <select id="sortSelect">
+                <option value="name-asc">商品名 A-Z</option>
+                <option value="name-desc">商品名 Z-A</option>
+                <option value="quantity-asc">在庫数 少ない順</option>
+                <option value="quantity-desc">在庫数 多い順</option>
+                <option value="price-asc">価格 安い順</option>
+                <option value="price-desc">価格 高い順</option>
+                <option value="arrivalDate-desc">入荷日 新しい順</option>
+                <option value="arrivalDate-asc">入荷日 古い順</option>
+              </select>
+            </label>
+            <div class="filter-box" role="group" aria-label="在庫フィルター">
+              <button class="segmented active" type="button" data-filter="all">すべて</button>
+              <button class="segmented" type="button" data-filter="low">不足</button>
+              <button class="segmented" type="button" data-filter="out">在庫切れ</button>
+            </div>
+          </div>
+
+          <div class="panel table-panel">
+            <div class="panel-head">
+              <div>
+                <p class="eyebrow">商品一覧</p>
+                <h2>在庫確認 Inventory Check</h2>
+              </div>
+              <button class="ghost-btn danger" id="clearData" type="button">デモをリセット</button>
+            </div>
+
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>商品名</th>
+                    <th>商品番号</th>
+                    <th>バーコード</th>
+                    <th>価格</th>
+                    <th>入荷日</th>
+                    <th>在庫数</th>
+                    <th>警告</th>
+                    <th>操作</th>
+                  </tr>
+                </thead>
+                <tbody id="inventoryTable"></tbody>
+              </table>
+            </div>
+            <div class="empty-state" id="emptyState" hidden>該当する商品がありません。</div>
+          </div>
+
+          <div class="history-grid">
+            <div class="panel movement-panel">
+              <div class="panel-head">
+                <div>
+                  <p class="eyebrow">入荷管理</p>
+                  <h2>入荷履歴 Arrival History</h2>
+                </div>
+              </div>
+              <ul id="arrivalList" class="movement-list"></ul>
+            </div>
+
+            <div class="panel movement-panel">
+              <div class="panel-head">
+                <div>
+                  <p class="eyebrow">出荷管理</p>
+                  <h2>出荷履歴 Shipping History</h2>
+                </div>
+              </div>
+              <ul id="shippingList" class="movement-list"></ul>
+            </div>
+          </div>
+
+          <div class="panel movement-panel">
+            <div class="panel-head">
+              <div>
+                <p class="eyebrow">ダッシュボード</p>
+                <h2>最近の更新</h2>
+              </div>
+            </div>
+            <ul id="recentUpdates" class="movement-list"></ul>
+          </div>
+
+          <div class="panel movement-panel">
+            <div class="panel-head">
+              <div>
+                <p class="eyebrow">在庫履歴</p>
+                <h2>すべての在庫変動</h2>
+              </div>
+            </div>
+            <ul id="stockHistoryList" class="movement-list"></ul>
+          </div>
+        </section>
+      </section>
+    </section>
+  </main>
+
+  <template id="stockActionTemplate">
+    <div class="stock-actions">
+      <button type="button" class="icon-btn stock-in" title="入荷" aria-label="入荷">+</button>
+      <button type="button" class="icon-btn stock-out" title="出荷" aria-label="出荷">-</button>
+      <button type="button" class="icon-btn remove" title="削除" aria-label="削除">x</button>
+    </div>
+  </template>
+
+  <script src="script.js"></script>
+</body>
+</html>

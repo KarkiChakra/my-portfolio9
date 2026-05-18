@@ -1,0 +1,116 @@
+{
+  "products": [
+    {
+      "id": "d57a68db-b7a1-476e-9f19-d4eb27df2b1c",
+      "name": "touchpad",
+      "code": "P-999",
+      "barcode": "45645678",
+      "price": 3400,
+      "quantity": 39,
+      "arrivalDate": "2026-05-18"
+    },
+    {
+      "id": "481e69ff-912e-47f1-8089-938bbcf4b3dd",
+      "name": "keyboard",
+      "code": "P-009",
+      "barcode": "12341234",
+      "price": 1200,
+      "quantity": 8,
+      "arrivalDate": "2026-05-18"
+    },
+    {
+      "id": "seed",
+      "name": "Seed Product",
+      "code": "S-1",
+      "barcode": "S1",
+      "price": 1,
+      "quantity": 1,
+      "arrivalDate": "2026-05-18"
+    }
+  ],
+  "arrivals": [
+    {
+      "id": "aea71348-ba0b-463e-b2f6-2d803799b884",
+      "productName": "touchpad",
+      "productCode": "P-999",
+      "arrivalDate": "2026-05-18",
+      "quantity": 39,
+      "time": "5月18日 12:19",
+      "timestamp": 1779074394725
+    },
+    {
+      "id": "5dda5901-dab6-4fbe-8e59-f2e8abc47f1f",
+      "productName": "keyboard",
+      "productCode": "P-009",
+      "arrivalDate": "2026-05-18",
+      "quantity": 15,
+      "time": "5月18日 12:17",
+      "timestamp": 1779074246457
+    }
+  ],
+  "shipping": [
+    {
+      "id": "efff44e7-8ba9-4baa-9957-f6712064ca67",
+      "productName": "keyboard",
+      "productCode": "P-009",
+      "arrivalDate": "2026-05-18",
+      "quantity": 1,
+      "time": "5月18日 12:20",
+      "timestamp": 1779074429301
+    },
+    {
+      "id": "47a9dd67-c1a0-430b-bcc9-872598fbd44d",
+      "productName": "keyboard",
+      "productCode": "P-009",
+      "arrivalDate": "2026-05-18",
+      "quantity": 1,
+      "time": "5月18日 12:20",
+      "timestamp": 1779074429086
+    },
+    {
+      "id": "f567f567-d6c2-4f37-b835-52190a3cb069",
+      "productName": "keyboard",
+      "productCode": "P-009",
+      "arrivalDate": "2026-05-18",
+      "quantity": 1,
+      "time": "5月18日 12:20",
+      "timestamp": 1779074428915
+    },
+    {
+      "id": "7cb61319-8f58-4afa-8b85-8ff0b918566e",
+      "productName": "keyboard",
+      "productCode": "P-009",
+      "arrivalDate": "2026-05-18",
+      "quantity": 1,
+      "time": "5月18日 12:20",
+      "timestamp": 1779074428748
+    },
+    {
+      "id": "bcf7e4cc-9a72-4028-927c-217166a3a9bb",
+      "productName": "keyboard",
+      "productCode": "P-009",
+      "arrivalDate": "2026-05-18",
+      "quantity": 1,
+      "time": "5月18日 12:20",
+      "timestamp": 1779074428577
+    },
+    {
+      "id": "f8019171-fd49-41c2-b947-1b9e884835a3",
+      "productName": "keyboard",
+      "productCode": "P-009",
+      "arrivalDate": "2026-05-18",
+      "quantity": 1,
+      "time": "5月18日 12:20",
+      "timestamp": 1779074428276
+    },
+    {
+      "id": "809c2ecd-90b7-43f0-a10c-d5bf0edef32c",
+      "productName": "keyboard",
+      "productCode": "P-009",
+      "arrivalDate": "2026-05-18",
+      "quantity": 1,
+      "time": "5月18日 12:20",
+      "timestamp": 1779074427633
+    }
+  ]
+}
