@@ -13,6 +13,24 @@ const LAST_AUTO_THEME_KEY = "lastAutoTheme";
 
 let lastThemeContext = null;
 
+function escapeHtml(value) {
+  return String(value ?? "").replace(/[&<>"']/g, (char) => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
+  })[char]);
+}
+
+function weatherIconUrl(icon) {
+  const raw = String(icon || "").trim();
+  if (!raw) return "";
+  if (raw.startsWith("//")) return `https:${raw}`;
+  if (raw.startsWith("https://")) return raw;
+  return "";
+}
+
 function parseAmPmTimeToMinutes(t) {
   if (!t || typeof t !== "string") return null;
   const m = t.trim().match(/^(\d{1,2}):(\d{2})\s*([AP]M)$/i);
@@ -300,7 +318,7 @@ function buildOpenMeteoForecastDays(daily) {
 // MESSAGE
 function renderMessage(msg) {
   document.getElementById("weatherResult").innerHTML = `
-    <div class="weather-card"><p>${msg}</p></div>
+    <div class="weather-card"><p>${escapeHtml(msg)}</p></div>
   `;
   document.getElementById("forecast").innerHTML = "";
 }
@@ -309,27 +327,28 @@ function renderMessage(msg) {
 function renderWeather(data) {
   const sunRow =
     data.sunrise && data.sunset
-      ? `<div class="sun-times"><span>Sunrise: ${data.sunrise}</span><span>Sunset: ${data.sunset}</span></div>`
+      ? `<div class="sun-times"><span>Sunrise: ${escapeHtml(data.sunrise)}</span><span>Sunset: ${escapeHtml(data.sunset)}</span></div>`
       : "";
-  const icon = data.icon ? `<img class="weather-icon" src="https:${data.icon}" alt="">` : "";
+  const iconUrl = weatherIconUrl(data.icon);
+  const icon = iconUrl ? `<img class="weather-icon" src="${escapeHtml(iconUrl)}" alt="">` : "";
 
   const card = `
     <div class="weather-card">
       <div class="weather-top">
         <div>
-          <h2>${data.name}, ${data.country}</h2>
+          <h2>${escapeHtml(data.name)}, ${escapeHtml(data.country)}</h2>
           <div class="weather-condition">
             ${icon}
-            <span>${data.condition}</span>
+            <span>${escapeHtml(data.condition)}</span>
           </div>
-          <div class="weather-time">Local time: ${data.localtime}</div>
+          <div class="weather-time">Local time: ${escapeHtml(data.localtime)}</div>
         </div>
         <div class="weather-temp">
-          <div class="weather-temp-main">${data.tempC}&deg;C</div>
-          <div class="weather-temp-sub">${data.tempF}&deg;F</div>
+          <div class="weather-temp-main">${escapeHtml(data.tempC)}&deg;C</div>
+          <div class="weather-temp-sub">${escapeHtml(data.tempF)}&deg;F</div>
         </div>
       </div>
-      <p>Wind: ${data.wind} km/h</p>
+      <p>Wind: ${escapeHtml(data.wind)} km/h</p>
       ${sunRow}
     </div>
   `;
@@ -396,22 +415,22 @@ function renderForecast(days) {
     const sunset = d?.astro?.sunset;
     const sunLine = sunrise && sunset ? `Sunrise ${sunrise} / Sunset ${sunset}` : "";
 
-    const icon = d?.day?.condition?.icon ? `https:${d.day.condition.icon}` : "";
+    const icon = weatherIconUrl(d?.day?.condition?.icon);
     const conditionText = d?.day?.condition?.text || "";
 
     const card = document.createElement("div");
     card.className = "forecast-card";
     card.innerHTML = `
       <div class="forecast-left">
-        <div class="forecast-weekday">${weekday}</div>
-        <div class="forecast-date">${monthDay}</div>
-        ${icon ? `<img class="forecast-icon" src="${icon}">` : ``}
+        <div class="forecast-weekday">${escapeHtml(weekday)}</div>
+        <div class="forecast-date">${escapeHtml(monthDay)}</div>
+        ${icon ? `<img class="forecast-icon" src="${escapeHtml(icon)}" alt="">` : ``}
       </div>
       <div class="forecast-right">
-        <div class="forecast-title">${conditionText}</div>
+        <div class="forecast-title">${escapeHtml(conditionText)}</div>
         <div class="forecast-temps">${temps}</div>
-        <div class="forecast-meta">${metaParts.join(" / ")}</div>
-        <div class="forecast-sun">${sunLine}</div>
+        <div class="forecast-meta">${escapeHtml(metaParts.join(" / "))}</div>
+        <div class="forecast-sun">${escapeHtml(sunLine)}</div>
       </div>
     `;
 
